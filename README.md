@@ -42,7 +42,7 @@ Se utiliza Supabase como motor de base de datos (PostgreSQL) y su **API REST** p
     SUPABASE_API_KEY=sb_publishable_Ky-SL26g3HvsFPgsFMOiNA_eFm9pRfe
     SUPABASE_REST_API_URL=https://jwcmrlnetstxzoctwnxv.supabase.co/rest/v1
     ```
-- Ejecuta los test, puedes ingresar el ambiente env o stage
+- Ejecuta los test, puedes ingresar el ambiente `dev` o `stage`
     ```bash
      pytest tests/test_import.py --env=dev
     ```
