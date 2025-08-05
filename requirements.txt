@@ -1,0 +1,5 @@
+supabase
+pytest
+requests
+python-dotenv
+faker
