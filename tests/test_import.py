@@ -24,12 +24,14 @@ class TestPersonAPI:
 
     @pytest.mark.parametrize("person_data", generate_persons(3))
     def test_post_person_and_validate_in_db(self, person_data, delete_personid_inserted):
+        #realizamos la consulta al POST de supabase /persons
+        status,response = self._api.post_create_person(person_data) #esto nos retorna status y response body
 
-        status,response = self._api.post_create_person(person_data)
         assert status in [200, 201]
-
+        #consulta directo a la base de datos similando un select con where personid
         db_data= self._db.find_person_by_person_id(person_data["personid"])
-        assert db_data is not None
+        assert db_data is not None #validacion de contenido en db_data
+        #contrarestamos info almacenada en la DB contra la enviada en el /POST
         assert db_data["email"] == person_data["email"]
         assert db_data["name"] == person_data["name"]
         assert db_data["age"] == person_data["age"]
@@ -38,6 +40,7 @@ class TestPersonAPI:
 
     def test_post_person_without_token(self):
         person_data = generate_persons(1)
+        #envio del usuario generado al /POST
         status, response = self._api.post_create_person(person_data, auth_token="")
 
         assert status == 401
@@ -49,19 +52,16 @@ class TestPersonAPI:
     import pytest
 
     @pytest.mark.parametrize("field, value", [
-
         ("age", "veinte"),  # tipo incorrecto [string]
-        ("age", None),      #campo requerido null
+        ("age", None),      # campo requerido null
         ("personid", None), # campo requerido null
         ("email", None),    # campo requerido null
-        #("email", "sinarroba.com"),  # mal formateado no se puede validar contra supabase
-
-
+        #("email", "sinarroba.com"),  # mal formateado, no se puede validar contra supabase
     ])
     def test_post_person_with_invalid_fields(self, field, value):
         person = generate_persons(1)[0]
-        person[field] = value
+        person[field] = value #esto reemplaza los campos por los valores del parametrize
 
-        status, response = self._api.post_create_person(person)
-        assert status in [400, 422]
+        status, _ = self._api.post_create_person(person)
+        assert status in [400, 422] #supabase no siempre responde el mismo status, asi lo controlamos
 

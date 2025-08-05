@@ -16,8 +16,7 @@ class PersonsAPI:
     def post_create_person(self, person_data: dict, auth_token=None):
         """
         Realiza una petición /POST al endpoint REST de Supabase para insertar una persona.
-
-        :param auth_token: supabase authentication token
+        :param auth_token: supabase authentication token (puede enviarse o utilizar el de la clase)
         :param person_data: Diccionario con los datos de la persona.
         :return: Objeto requests.Response
         """
